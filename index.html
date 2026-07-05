@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar glass-panel">
+        <div class="brand-group">
+          <div class="brand-mark">✓</div>
+          <div>
+            <p class="eyebrow">Smart productivity</p>
+            <h1>TaskFlow</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary" id="themeToggle" type="button">🌙</button>
+          <button class="btn btn-secondary" id="exportTasks" type="button">Export</button>
+          <button class="btn btn-secondary" id="importTasks" type="button">Import</button>
+          <button class="btn btn-primary" id="openTaskModal" type="button">+ New Task</button>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="hero glass-panel">
+          <div>
+            <p class="eyebrow">Your personal command center</p>
+            <h2>Stay on top of every priority.</h2>
+            <p class="hero-copy">
+              Organize tasks, track progress, and keep your day moving with a calm and modern workspace.
+            </p>
+          </div>
+          <div class="hero-badge">✨ Focused flow</div>
+        </section>
+
+        <section class="stats-grid" id="statsGrid"></section>
+
+        <section class="control-panel glass-panel">
+          <div class="search-row">
+            <label class="search-box" for="searchInput">
+              <span>🔎</span>
+              <input id="searchInput" type="search" placeholder="Search tasks, categories, notes..." />
+            </label>
+            <label class="sort-box">
+              <span>⇅</span>
+              <select id="sortSelect">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="dueDate">Due Date</option>
+                <option value="highPriority">High Priority First</option>
+                <option value="lowPriority">Low Priority First</option>
+                <option value="alphabetical">Alphabetically</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="filters" id="filters"></div>
+        </section>
+
+        <section class="board-grid">
+          <section class="glass-panel form-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Quick capture</p>
+                <h3>Create a task</h3>
+              </div>
+              <span class="chip">Press Enter to save</span>
+            </div>
+            <form id="taskForm" class="task-form">
+              <div class="field-group">
+                <label for="title">Title</label>
+                <input id="title" name="title" type="text" placeholder="What needs attention?" required />
+              </div>
+              <div class="field-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="3" placeholder="Add helpful context"></textarea>
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label for="dueDate">Due Date</label>
+                  <input id="dueDate" name="dueDate" type="date" />
+                </div>
+                <div class="field-group">
+                  <label for="priority">Priority</label>
+                  <select id="priority" name="priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                  <option value="Study">Study</option>
+                  <option value="Personal">Personal</option>
+                  <option value="Work">Work</option>
+                </select>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Save Task</button>
+                <button class="btn btn-secondary" type="reset" id="resetForm">Clear</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="glass-panel tasks-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Task board</p>
+                <h3>Today’s focus</h3>
+              </div>
+              <span class="chip" id="taskCount">0 tasks</span>
+            </div>
+            <div id="tasksList" class="tasks-list"></div>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer glass-panel">
+        <p>TaskFlow • Built with HTML, CSS, and vanilla JavaScript.</p>
+      </footer>
+    </div>
+
+    <div class="modal-overlay" id="taskModal" aria-hidden="true">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Task editor</p>
+            <h3 id="modalTitle">Create task</h3>
+          </div>
+          <button class="icon-btn" id="closeModal" type="button">✕</button>
+        </div>
+        <form id="modalTaskForm" class="task-form">
+          <input type="hidden" id="modalTaskId" />
+          <div class="field-group">
+            <label for="modalTitleInput">Title</label>
+            <input id="modalTitleInput" name="title" type="text" placeholder="What needs attention?" required />
+          </div>
+          <div class="field-group">
+            <label for="modalDescriptionInput">Description</label>
+            <textarea id="modalDescriptionInput" name="description" rows="3" placeholder="Add helpful context"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="modalDueDateInput">Due Date</label>
+              <input id="modalDueDateInput" name="dueDate" type="date" />
+            </div>
+            <div class="field-group">
+              <label for="modalPriorityInput">Priority</label>
+              <select id="modalPriorityInput" name="priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="modalCategoryInput">Category</label>
+            <select id="modalCategoryInput" name="category">
+              <option value="Study">Study</option>
+              <option value="Personal">Personal</option>
+              <option value="Work">Work</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+            <button class="btn btn-secondary" type="button" id="cancelModal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+    <input type="file" id="importFile" accept="application/json" hidden />
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
